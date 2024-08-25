@@ -70,22 +70,22 @@ if in == 'y' || in == 'Y'
 
     figure(1);
     for i = 1:6
-    subplot(6,1,i),plot(ts_nW{i},FCR_nW{i}),title ("FCR RAW NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+    subplot(6,1,i),plot(ts_nW{i},FCR_nW{i}),title ("RAW FCR NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
     end
     
     figure(2);
     for i = 1:6
-    subplot(6,1,i),plot(ts_nW{i},FDS_nW{i}),title ("FDS RAW NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+    subplot(6,1,i),plot(ts_nW{i},FDS_nW{i}),title ("RAW FDS NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
     end
 
 figure(3);
 for i = 1:6
-    subplot(6,1,i),plot(ts_W{i},FCR_W{i}),title ("FCR RAW WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+    subplot(6,1,i),plot(ts_W{i},FCR_W{i}),title ("RAW FCR WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
 end
 
 figure(4);
 for i = 1:6
-    subplot(6,1,i),plot(ts_W{i},FDS_W{i}),title ("FDS RAW WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+    subplot(6,1,i),plot(ts_W{i},FDS_W{i}),title ("RAW FDS WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
 end
 end
 
@@ -95,37 +95,41 @@ fnyq = FS/2;  % Nyquist frequency
 fcutlow = 450;
 fcuthigh = 20;
 fnotch = 50;
-
-
+Q = 20;
 
 % To store filtered data
+no_FCRnW{i} = cell(6,1);
+no_FCRW{i} = cell(6,1);
+no_FDSnW{i} = cell(6,1);
+no_FDSW{i} = cell(6,1);
+
 flt_FCRnW = cell(6,1);
 flt_FCRW = cell(6,1);
 flt_FDSnW = cell(6,1);
 flt_FDSW = cell(6,1);
 
+% 50Hz Notch filter
+wo = fnotch/fnyq;  
+bw = wo/Q;
+[x,y] = iirnotch(wo,bw);
 
 % 4th order butterworth bandpass filter
 [a,b] = butter(4,[fcuthigh,fcutlow]/fnyq,"bandpass");
 
-% 50Hz Notch filter
-wo = fnotch/fnyq;  
-bw = wo/35;
-[x,y] = iirnotch(wo,bw);
 
 for i=1:6
-
-    % Apply bandpass filter
-    flt_FCRnW{i} = filtfilt(a,b,FCR_nW{i});
-    flt_FCRW{i} = filtfilt(a,b,FCR_W{i});
-    flt_FDSnW{i} = filtfilt(a,b,FDS_nW{i});
-    flt_FDSW{i} = filtfilt(a,b,FDS_W{i});
     
     % Apply notch filter
-    flt_FCRnW{i} = filtfilt(x,y,FCR_nW{i});
-    flt_FCRW{i} = filtfilt(x,y,FCR_W{i});
-    flt_FDSnW{i} = filtfilt(x,y,FDS_nW{i});
-    flt_FDSW{i} = filtfilt(x,y,FDS_W{i});
+    no_FCRnW{i} = filtfilt(x,y,FCR_nW{i});
+    no_FCRW{i} = filtfilt(x,y,FCR_W{i});
+    no_FDSnW{i} = filtfilt(x,y,FDS_nW{i});
+    no_FDSW{i} = filtfilt(x,y,FDS_W{i});
+
+    % Apply bandpass filter
+    flt_FCRnW{i} = filtfilt(a,b,no_FCRnW{i});
+    flt_FCRW{i} = filtfilt(a,b,no_FCRW{i});
+    flt_FDSnW{i} = filtfilt(a,b,no_FDSnW{i});
+    flt_FDSW{i} = filtfilt(a,b,no_FDSW{i});
 
 end
 
@@ -152,7 +156,7 @@ if in == 'y' || in == 'Y'
 
     else
         for k = 1:6
-            subplot(6,1,k),plot(ts_W{k},flt_FDSW{k}),title(" Filtered FDSWEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+            subplot(6,1,k),plot(ts_W{k},flt_FDSW{k}),title(" Filtered FDS WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
         end
     end
     end
