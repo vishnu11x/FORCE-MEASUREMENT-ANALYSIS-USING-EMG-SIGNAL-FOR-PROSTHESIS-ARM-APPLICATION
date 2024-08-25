@@ -64,24 +64,29 @@ for i = 1:6
     ts_W{i} = 0:TS:(len-1)/FS;
 end
 
-figure(1);
-for i = 1:6
-    subplot(6,1,i),plot(ts_nW{i},FCR_nW{i}),title ("FCR RAW NO-WEIGHT");
-end
 
-figure(2);
-for i = 1:6
-    subplot(6,1,i),plot(ts_nW{i},FDS_nW{i}),title ("FDS RAW NO-WEIGHT");
-end
+in = input('plot raw signals: y or n \n','s'); % Input from user
+if in == 'y' || in == 'Y'
+
+    figure(1);
+    for i = 1:6
+    subplot(6,1,i),plot(ts_nW{i},FCR_nW{i}),title ("FCR RAW NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+    end
+    
+    figure(2);
+    for i = 1:6
+    subplot(6,1,i),plot(ts_nW{i},FDS_nW{i}),title ("FDS RAW NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+    end
 
 figure(3);
 for i = 1:6
-    subplot(6,1,i),plot(ts_W{i},FCR_W{i}),title ("FCR RAW WEIGHT");
+    subplot(6,1,i),plot(ts_W{i},FCR_W{i}),title ("FCR RAW WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
 end
 
 figure(4);
 for i = 1:6
-    subplot(6,1,i),plot(ts_W{i},FDS_W{i}),title ("FDS RAW WEIGHT");
+    subplot(6,1,i),plot(ts_W{i},FDS_W{i}),title ("FDS RAW WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+end
 end
 
 %% Butterworth filter
@@ -124,32 +129,219 @@ for i=1:6
 
 end
 
-for i=5:8
+in = input('plot filter signals: y or n \n','s');
+if in == 'y' || in == 'Y'
+    
+    for i=5:8
     figure(i);
 
     if i == 5
         for k = 1:6
-            subplot(6,1,k),plot(ts_nW{k},flt_FCRnW{k}),title(" Filtered FCR NO-WEIGHT");
+            subplot(6,1,k),plot(ts_nW{k},flt_FCRnW{k}),title(" Filtered FCR NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
         end
-    end
 
-    if i == 6
+    elseif i == 6
         for k = 1:6
-            subplot(6,1,k),plot(ts_nW{k},flt_FDSnW{k}),title(" Filtered FDS NO-WEIGHT");
+            subplot(6,1,k),plot(ts_nW{k},flt_FDSnW{k}),title(" Filtered FDS NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
         end
-    end
 
-    if i == 7
+    elseif i == 7
         for k = 1:6
-            subplot(6,1,k),plot(ts_W{k},flt_FCRW{k}),title(" Filtered FCR WEIGHT");
+            subplot(6,1,k),plot(ts_W{k},flt_FCRW{k}),title(" Filtered FCR WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+        end
+
+    else
+        for k = 1:6
+            subplot(6,1,k),plot(ts_W{k},flt_FDSW{k}),title(" Filtered FDSWEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
         end
     end
+    end
+end
 
+%% RMS
+windowLength = 250;  % Window length in samples
+
+rms_FCRnW = cell(6,1);
+rms_FCRW = cell(6,1);
+rms_FDSnW = cell(6,1);
+rms_FDSW = cell(6,1);
+
+for i = 1:4
+    if i == 1
+        for k = 1:6
+            data = flt_FCRnW{k};
+            rms_FCRnW{k} = sqrt(movmean(data.^2,windowLength));
+        end
+    elseif i == 2
+        for k = 1:6
+            data = abs(flt_FCRW{k});
+            rms_FCRW{k} = sqrt(movmean(data.^2,windowLength));
+        end
+    elseif i == 3
+        for k = 1:6
+            data = flt_FDSnW{k};
+            rms_FDSnW{k} = sqrt(movmean(data.^2,windowLength));
+        end
+    else
+        for k = 1:6
+            data = flt_FDSW{k};
+            rms_FDSW{k} = sqrt(movmean(data.^2,windowLength));
+        end
+    end
+end
+
+in = input('plot RMS signals: y or n \n','s');
+if in == 'y' || in == 'Y'
     
-
-    if i == 8
+    for i = 9:12
+        figure(i);
+        
+        if i == 9
         for k = 1:6
-            subplot(6,1,k),plot(ts_W{k},flt_FDSW{k}),title(" Filtered FDSWEIGHT");
+            subplot(6,1,k),plot(ts_nW{k},rms_FCRnW{k}),title(" RMS FCR NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+        end
+
+    elseif i == 10
+        for k = 1:6
+            subplot(6,1,k),plot(ts_nW{k},rms_FDSnW{k}),title(" RMS FDS NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+        end
+
+    elseif i == 11
+        for k = 1:6
+            subplot(6,1,k),plot(ts_W{k},rms_FCRW{k}),title(" RMS FCR WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+        end
+        
+    else
+        for k = 1:6
+            subplot(6,1,k),plot(ts_W{k},rms_FDSW{k}),title(" RMS FDS WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+        end
+        end
+    end
+end
+
+%% MAV
+
+mav_FCRnW = cell(6,1);
+mav_FCRW = cell(6,1);
+mav_FDSnW = cell(6,1);
+mav_FDSW = cell(6,1);
+
+for i = 1:4
+    
+    if i == 1
+        for k = 1:6
+            buffer = abs(flt_FCRnW{k});
+            mav_FCRnW{k} = movmean(abs(buffer), windowLength);
+        end
+
+    elseif i == 2
+
+        for k = 1:6
+            buffer = abs(flt_FCRW{k});
+            mav_FCRW{k} = movmean(abs(buffer), windowLength);
+        end
+
+    elseif i == 3 
+        for k = 1:6
+            buffer = abs(flt_FDSnW{k});
+            mav_FDSnW{k} = movmean(abs(buffer), windowLength);
+        end
+
+    else
+        for k = 1:6
+            buffer = abs(flt_FDSW{k});
+            mav_FDSW{k} = movmean(abs(buffer), windowLength);
+        end
+    end
+end
+
+in = input('plot MAV signals: y or n \n','s');
+if in == 'y' || in == 'Y'
+    
+    for i = 13:16
+        figure(i);
+        
+        if i == 13
+        for k = 1:6
+            subplot(6,1,k),plot(ts_nW{k},mav_FCRnW{k}),title(" MAV FCR NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+        end
+
+    elseif i == 14
+        for k = 1:6
+            subplot(6,1,k),plot(ts_nW{k},mav_FDSnW{k}),title(" MAV FDS NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+        end
+
+    elseif i == 15
+        for k = 1:6
+            subplot(6,1,k),plot(ts_W{k},mav_FCRW{k}),title(" MAV FCR WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+        end
+        
+    else
+        for k = 1:6
+            subplot(6,1,k),plot(ts_W{k},mav_FDSW{k}),title(" MAV FDS WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+        end
+        end
+    end
+end
+
+%% Zero-Crossing
+zc_FCRnW = cell(6,1);
+zc_FCRW = cell(6,1);
+zc_FDSnW = cell(6,1);
+zc_FDSW = cell(6,1);
+
+for i = 1:4
+    if i == 1
+
+        for k = 1:6
+            buffer = flt_FCRnW{k};
+            zc_FCRnW{k} = zerocrossrate(buffer,"WindowLength",windowLength); 
+        end
+
+    elseif i == 2
+        for k = 1:6
+            buffer = flt_FCRW{k};
+            zc_FCRW{k} = zerocrossrate(buffer,"WindowLength",windowLength); 
+        end
+    
+    elseif i == 3
+        for k = 1:6
+            buffer = flt_FDSnW{k};
+            zc_FDSnW{k} = zerocrossrate(buffer,"WindowLength",windowLength); 
+        end
+    else
+        for k = 1:6
+            buffer = flt_FDSW{k};
+            zc_FDSW{k} = zerocrossrate(buffer,"WindowLength",windowLength); 
+        end
+    end
+end
+
+in = input('plot ZC  signals: y or n \n','s');
+if in == 'y' || in == 'Y'
+    
+    for i = 17:20
+        figure(i);
+        
+        if i == 17
+        for k = 1:6
+            subplot(6,1,k),plot(zc_FCRnW{k}),title(" ZC FCR NO-WEIGHT"),xlabel("Window Index"),ylabel("volts (mV)");
+        end
+
+    elseif i == 18
+        for k = 1:6
+            subplot(6,1,k),plot(zc_FDSnW{k}),title(" ZC FDS NO-WEIGHT"),xlabel("Window Index"),ylabel("volts (mV)");
+        end
+
+    elseif i == 19
+        for k = 1:6
+            subplot(6,1,k),plot(zc_FCRW{k}),title(" ZC FCR WEIGHT"),xlabel("Window Index"),ylabel("volts (mV)");
+        end
+        
+    else
+        for k = 1:6
+            subplot(6,1,k),plot(zc_FDSW{k}),title(" ZC FDS WEIGHT"),xlabel("Window Index"),ylabel("volts (mV)");
+        end
         end
     end
 end
@@ -158,3 +350,11 @@ end
 
 
 
+
+
+
+
+
+
+
+    
