@@ -36,6 +36,7 @@ for i = 1:length(fileList_nW)
     
     % Display the name of the loaded file
     disp(['Loaded file: ' fileList_nW(i).name]);
+    buffer = 0;
 end
 
 % Loop through each file and load the data
@@ -51,6 +52,7 @@ for i = 1:length(fileList_W)
     
     % Display the name of the loaded file
     disp(['Loaded file: ' fileList_W(i).name]);
+    buffer = 0;
 end
 
 % time for signals
@@ -175,21 +177,25 @@ for i = 1:4
         for k = 1:6
             data = flt_FCRnW{k};
             rms_FCRnW{k} = sqrt(movmean(data.^2,windowLength));
+            data = 0;
         end
     elseif i == 2
         for k = 1:6
             data = abs(flt_FCRW{k});
             rms_FCRW{k} = sqrt(movmean(data.^2,windowLength));
+            data = 0;
         end
     elseif i == 3
         for k = 1:6
             data = flt_FDSnW{k};
             rms_FDSnW{k} = sqrt(movmean(data.^2,windowLength));
+            data = 0;
         end
     else
         for k = 1:6
             data = flt_FDSW{k};
             rms_FDSW{k} = sqrt(movmean(data.^2,windowLength));
+            data = 0;
         end
     end
 end
@@ -236,6 +242,7 @@ for i = 1:4
         for k = 1:6
             buffer = abs(flt_FCRnW{k});
             mav_FCRnW{k} = movmean(abs(buffer), windowLength);
+            buffer = 0;
         end
 
     elseif i == 2
@@ -243,18 +250,21 @@ for i = 1:4
         for k = 1:6
             buffer = abs(flt_FCRW{k});
             mav_FCRW{k} = movmean(abs(buffer), windowLength);
+            buffer = 0;
         end
 
     elseif i == 3 
         for k = 1:6
             buffer = abs(flt_FDSnW{k});
             mav_FDSnW{k} = movmean(abs(buffer), windowLength);
+            buffer = 0;
         end
 
     else
         for k = 1:6
             buffer = abs(flt_FDSW{k});
             mav_FDSW{k} = movmean(abs(buffer), windowLength);
+            buffer = 0;
         end
     end
 end
@@ -299,24 +309,28 @@ for i = 1:4
 
         for k = 1:6
             buffer = flt_FCRnW{k};
-            zc_FCRnW{k} = zerocrossrate(buffer,"WindowLength",windowLength); 
+            zc_FCRnW{k} = zerocrossrate(buffer,"WindowLength",windowLength);
+            buffer = 0;
         end
 
     elseif i == 2
         for k = 1:6
             buffer = flt_FCRW{k};
             zc_FCRW{k} = zerocrossrate(buffer,"WindowLength",windowLength); 
+            buffer = 0;
         end
     
     elseif i == 3
         for k = 1:6
             buffer = flt_FDSnW{k};
             zc_FDSnW{k} = zerocrossrate(buffer,"WindowLength",windowLength); 
+            buffer = 0;
         end
     else
         for k = 1:6
             buffer = flt_FDSW{k};
             zc_FDSW{k} = zerocrossrate(buffer,"WindowLength",windowLength); 
+            buffer = 0;
         end
     end
 end
@@ -349,16 +363,51 @@ if in == 'y' || in == 'Y'
         end
     end
 end
+%% Segmentation
+seg_FCRnW = cell(6,1);
+seg_FCRW = cell(6,1);
+seg_FDSnW = cell(6,1);
+seg_FDSW = cell(6,1);
 
+seg_winlen = 250; % Length of the moving window in milliseconds
+overlap = 90; % Overlap percentage
 
-
-
-
-
-
-
-
-
-
-
+seg_samplen = round(seg_winlen * FS / 1000); % Convert window length from milliseconds to samples
+increment = round(seg_samplen * (1 - overlap / 100)); % Calculate the increment (step size) based on the overlap
+ for k = 1:6
+    buffer0 =  flt_FCRnW{k};
+    buffer1 = flt_FDSnW{k};
+    buffer2 = flt_FCRW{k};
+    buffer3 = flt_FDSW{k};
+    % Calculate the number of windows
+    num_windows0 = floor((length(buffer0) - seg_samplen) / increment) + 1;
+    num_windows1 = floor((length(buffer2) - seg_samplen) / increment) + 1;
+    % Initialize the segmentation arrays
+    seg_FCRnW{k} = cell(1, num_windows0);
+    seg_FDSnW{k} = cell(1, num_windows0);
+    seg_FCRW{k} = cell(1, num_windows0);
+    seg_FDSW{k} = cell(1, num_windows0);
     
+    for j = 1:num_windows0
+        %Calculate the start and end indices of the current window
+        start_idx = (j-1)*increment + 1;
+        end_idx = start_idx + seg_samplen - 1;
+        % Extract the current window from the buffer
+        seg_FCRnW{k}{1,j} = buffer0(start_idx:end_idx);
+        seg_FDSnW{k}{1,j} = buffer1(start_idx:end_idx);
+    end
+    
+    for j = 1:num_windows1
+        %Calculate the start and end indices of the current window
+        start_idx = (j-1)*increment + 1;
+        end_idx = start_idx + seg_samplen - 1;
+        % Extract the current window from the buffer
+        seg_FCRW{k}{1,j} = buffer2(start_idx:end_idx);
+        seg_FDSW{k}{1,j} = buffer3(start_idx:end_idx);
+    end
+    buffer0 = 0;
+    buffer1 = 0;
+    buffer2 = 0;
+    buffer3 = 0;
+ end
+
