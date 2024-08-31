@@ -164,7 +164,7 @@ for i = 1:6
     buffer0 =  seg_FCRnW{i};
     buffer1 = seg_FDSnW{i};
     buffer2 = seg_FCRW{i};
-    buffer3 = seg_FDSW{i}
+    buffer3 = seg_FDSW{i};
     data0 = 0;
     data1 = 0;
     
@@ -206,7 +206,7 @@ for i = 1:6
     buffer0 =  seg_FCRnW{i};
     buffer1 = seg_FDSnW{i};
     buffer2 = seg_FCRW{i};
-    buffer3 = seg_FDSW{i}
+    buffer3 = seg_FDSW{i};
     data0 = 0;
     data1 = 0;
     
@@ -227,7 +227,7 @@ for i = 1:6
          data0 = buffer2{1,j};
          data1 = buffer3{1,j};
          mav_seg_FCRW{i}{1,j} = mean(abs(data0));
-         mav_seg_FDSW{i}{1,j} = mean(abs(data0));
+         mav_seg_FDSW{i}{1,j} = mean(abs(data1));
          data0 = 0;
          data1 = 0;
      end
@@ -236,6 +236,7 @@ for i = 1:6
     buffer2 = 0;
     buffer3 = 0;
 end
+
 
  %% ZC SEGMENT 
 
@@ -278,3 +279,17 @@ for i = 1:6
     buffer2 = 0;
     buffer3 = 0;
 end
+
+%%1SUB
+sub1_FCRnW(1,:) = cell2mat(rms_seg_FCRnW{1});
+sub1_FCRnW(2,:) = cell2mat(mav_seg_FCRnW{1});
+sub1_FCRnW(3,:) = cell2mat(zc_seg_FCRnW{1});
+num = length(sub1_FCRnW);
+row = {'RMS', 'MAV', 'ZC'};
+col = arrayfun(@(x) sprintf('Segment%d', x), 1:num, 'UniformOutput', false);
+dataTable = array2table(sub1_FCRnW, 'RowNames', row, 'VariableNames', col);
+writetable(dataTable, 'segmentsData.csv', 'WriteRowNames', true);
+
+figure(1);
+rms = table2array(dataTable(1,:));
+stem(rms),title ("RMS SEGMENTS FCR NO-WEIGHT"),xlabel("segments index"),ylabel("volts(ms)");

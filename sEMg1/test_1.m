@@ -363,3 +363,31 @@ if in == 'y' || in == 'Y'
         end
     end
 end
+
+figure(1);
+subplot(5,1,1), plot(FCR_nW{1}),title ("RAW FCR NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,2), plot(flt_FCRnW{1}),title ("FILTERED FCR NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,3), plot(rms_FCRnW{1}),title ("RMS FCR NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,4), plot(mav_FCRnW{1}),title ("MAV FCR NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,5), plot(zc_FCRnW{1}),title ("ZERO-CROSSING FCR NO-WEIGHT"),xlabel("time (s)"),ylabel("Zero Crossings Count");
+
+figure(2);
+subplot(5,1,1), plot(FDS_nW{1}),title ("RAW FDS NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,2), plot(flt_FDSnW{1}),title ("FILTERED FDS NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,3), plot(rms_FDSnW{1}),title ("RMS FDS NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,4), plot(mav_FDSnW{1}),title ("MAV FDS NO-WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,5), plot(zc_FDSnW{1}),title ("ZERO-CROSSING FDS NO-WEIGHT"),xlabel("time (s)"),ylabel("Zero Crossings Count");
+
+figure(3);
+subplot(5,1,1), plot(FCR_W{1}),title ("RAW FCR WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,2), plot(flt_FCRW{1}),title ("FILTERED FCR WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,3), plot(rms_FCRW{1}),title ("RMS FCR WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,4), plot(mav_FCRW{1}),title ("MAV FCR WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,5), plot(zc_FCRW{1}),title ("ZERO-CROSSING FCR WEIGHT"),xlabel("time (s)"),ylabel("Zero Crossings Count");
+
+figure(4);
+subplot(5,1,1), plot(FDS_W{1}),title ("RAW FDS WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,2), plot(flt_FDSW{1}),title ("FILTERED FDS WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,3), plot(rms_FDSW{1}),title ("RMS FDS WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,4), plot(mav_FDSW{1}),title ("MAV FDS WEIGHT"),xlabel("time (s)"),ylabel("volts (mV)");
+subplot(5,1,5), plot(zc_FDSW{1}),title ("ZERO-CROSSING FDS WEIGHT"),xlabel("time (s)"),ylabel("Zero Crossings Count");
