@@ -4,6 +4,11 @@ clc
 
 FS = 1000; %sampling rate
 TS = 1/FS; % time period
+no_task = 3; % No of tasks
+task_len_sec = 6;  % Duration of each task in seconds
+task__len_smp = task_len_sec * FS;  % Task duration in samples
+cycle_len_smp = task__len_smp * no_task;  % Total duration of one cycle in samples
+tasl_list = {'Rest', 'Hold', 'Lift'};
 
 %% Load data
 % Specify the folder where the files are stored
@@ -59,11 +64,15 @@ end
 for i = 1:6
     len = length(FCR_nW{i});
     ts_nW{i} = 0:TS:(len-1)/FS;
+    x = generate_task_labels(len,task__len_smp);
+
+    len = 0;
 end
 
 for i = 1:6
     len = length(FCR_W{i});
     ts_W{i} = 0:TS:(len-1)/FS;
+    len = 0;
 end
 
 %% Butterworth filter
@@ -129,6 +138,12 @@ increment = round(seg_samplen * (1 - overlap / 100)); % Calculate the increment 
     % Calculate the number of windows
     num_windows0 = floor((length(buffer0) - seg_samplen) / increment) + 1;
     num_windows1 = floor((length(buffer2) - seg_samplen) / increment) + 1;
+
+    % Initialize an cell to hold the annotations for each segment
+    % 1 = Rest, 2 = Holding, 3 = Lifting
+    annotation_nW = cell(k);
+    annotation_W = cell(k);
+
     
     for j = 1:num_windows0
         %Calculate the start and end indices of the current window
@@ -279,17 +294,3 @@ for i = 1:6
     buffer2 = 0;
     buffer3 = 0;
 end
-
-%%1SUB
-sub1_FCRnW(1,:) = cell2mat(rms_seg_FCRnW{1});
-sub1_FCRnW(2,:) = cell2mat(mav_seg_FCRnW{1});
-sub1_FCRnW(3,:) = cell2mat(zc_seg_FCRnW{1});
-num = length(sub1_FCRnW);
-row = {'RMS', 'MAV', 'ZC'};
-col = arrayfun(@(x) sprintf('Segment%d', x), 1:num, 'UniformOutput', false);
-dataTable = array2table(sub1_FCRnW, 'RowNames', row, 'VariableNames', col);
-writetable(dataTable, 'segmentsData.csv', 'WriteRowNames', true);
-
-figure(1);
-rms = table2array(dataTable(1,:));
-stem(rms),title ("RMS SEGMENTS FCR NO-WEIGHT"),xlabel("segments index"),ylabel("volts(ms)");
