@@ -64,8 +64,6 @@ end
 for i = 1:6
     len = length(FCR_nW{i});
     ts_nW{i} = 0:TS:(len-1)/FS;
-    x = generate_task_labels(len,task__len_smp);
-
     len = 0;
 end
 
@@ -84,10 +82,10 @@ fnotch = 50;
 Q = 20;
 
 % To store filtered data
-no_FCRnW{i} = cell(6,1);
-no_FCRW{i} = cell(6,1);
-no_FDSnW{i} = cell(6,1);
-no_FDSW{i} = cell(6,1);
+no_FCRnW = cell(6,1);
+no_FCRW = cell(6,1);
+no_FDSnW = cell(6,1);
+no_FDSW = cell(6,1);
 
 flt_FCRnW = cell(6,1);
 flt_FCRW = cell(6,1);
