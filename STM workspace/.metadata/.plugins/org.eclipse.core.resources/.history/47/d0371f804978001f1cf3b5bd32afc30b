@@ -1,0 +1,66 @@
+#define DMA2_BASE        0x40026400
+#define DMA_STREAM0_BASE (DMA2_BASE + 0x010)
+#define DMA_SxCR(stream) (*((volatile unsigned int *)(stream + 0x00)))  // DMA stream control register
+#define DMA_SxNDTR(stream) (*((volatile unsigned int *)(stream + 0x04))) // DMA stream number of data register
+#define DMA_SxPAR(stream) (*((volatile unsigned int *)(stream + 0x08)))  // DMA stream peripheral address register
+#define DMA_SxM0AR(stream) (*((volatile unsigned int *)(stream + 0x0C))) // DMA stream memory 0 address register
+#define DMA_SxFCR(stream) (*((volatile unsigned int *)(stream + 0x10)))  // DMA stream FIFO control register
+
+#define ADC_CDR       (*((volatile unsigned int *)0x40012308))  // ADC common data register (for all 3 ADCs)
+#define ADC_CCR       (*((volatile unsigned int *)0x40012304))  // ADC common control register
+
+// DMA Stream 0 (example, can vary based on your setup)
+#define DMA2_STREAM0  0x40026410
+#define DMA2_STREAM0_CR_EN (1 << 0)  // DMA enable bit
+
+// Configurable memory buffer for storing ADC results
+volatile unsigned int adc_result_buffer[3];  // Buffer to hold ADC1, ADC2, and ADC3 results
+
+void dma_init(void) {
+    // Step 1: Enable DMA2 clock (this is needed, typically done in RCC)
+    // RCC_AHB1ENR |= RCC_AHB1ENR_DMA2EN;  // Enable DMA2 clock (this line is just for illustration)
+
+    // Step 2: Configure DMA stream 0 to transfer data from ADC_CDR to adc_result_buffer
+    DMA_SxCR(DMA2_STREAM0_BASE) &= ~DMA_SxCR_EN;  // Disable DMA before configuring
+
+    DMA_SxCR(DMA2_STREAM0_BASE) = (0x00 << 25) |  // Select DMA channel (ADC uses channel 0 on DMA2)
+                                  (0x02 << 16) |  // Priority level (set medium priority)
+                                  (0x00 << 13) |  // Memory data size = 32 bits
+                                  (0x00 << 11) |  // Peripheral data size = 32 bits (matches ADC_CDR size)
+                                  (0x01 << 10) |  // Memory increment mode (enable)
+                                  (0x00 << 6) |   // Peripheral increment mode (disable)
+                                  (0x01 << 8);    // Circular mode (if needed, continuous conversion)
+
+    DMA_SxNDTR(DMA2_STREAM0_BASE) = 3;  // Number of data items to transfer (3 half-words: ADC1, ADC2, ADC3)
+
+    DMA_SxPAR(DMA2_STREAM0_BASE) = (unsigned int)(&ADC_CDR);  // Peripheral address: ADC_CDR register
+
+    DMA_SxM0AR(DMA2_STREAM0_BASE) = (unsigned int)(adc_result_buffer);  // Memory address: adc_result_buffer
+
+    // Step 3: Enable DMA stream 0
+    DMA_SxCR(DMA2_STREAM0_BASE) |= DMA_SxCR_EN;
+}
+
+void adc_init(void) {
+    // Configure ADC1, ADC2, ADC3 for triple regular simultaneous mode
+    // (Code similar to previous example, skipping for brevity)
+
+    // Enable DMA mode in the ADC common control register
+    ADC_CCR |= (0x01 << 14);  // Set DMA mode 1 in ADC_CCR
+
+    // Start ADC conversion (could be triggered by a timer or software)
+}
+
+int main(void) {
+    dma_init();  // Initialize DMA for transferring ADC results
+    adc_init();  // Initialize ADCs in triple regular simultaneous mode
+
+    while (1) {
+        // Wait for DMA transfer to complete
+        // adc_result_buffer will have the results of ADC1, ADC2, and ADC3
+        volatile unsigned int adc1_result = adc_result_buffer[0];  // Result of ADC1
+        volatile unsigned int adc2_result = adc_result_buffer[1];  // Result of ADC2
+        volatile unsigned int adc3_result = adc_result_buffer[2];  // Result of ADC3
+    }
+}
+

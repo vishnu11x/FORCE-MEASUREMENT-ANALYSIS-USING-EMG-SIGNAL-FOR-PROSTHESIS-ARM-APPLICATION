@@ -1,0 +1,12 @@
+/*
+ * system_stm32f4xx.c
+ *
+ *  Created on: Sep 21, 2024
+ *      Author: Vishnu
+ */
+
+#include <stdint.h>
+
+
+uint32_t SystemCoreClock = 16000000;
+
