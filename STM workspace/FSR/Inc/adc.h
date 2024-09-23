@@ -11,14 +11,16 @@
 
 #include <stdint.h>
 #include <stm32f4xx.h>  // Library for STM32f407
-#include <stm32f4xx_hal.h>
 
-extern volatile uint32_t dma2_status;
+extern volatile uint16_t dma2_status;
 extern volatile uint32_t adc_data;
+extern uint16_t adc1_data;  // Extract ADC1 data
+extern uint16_t adc2_data;
+extern uint16_t adc3_data;
 
 void adc_init(void);
 void adc_start(void);
-void adc_read(void);
+void process_adc_data(uint32_t data);
 void DMA2_Stream0_IRQHandler(void);
 
 #endif /* ADC_H_ */

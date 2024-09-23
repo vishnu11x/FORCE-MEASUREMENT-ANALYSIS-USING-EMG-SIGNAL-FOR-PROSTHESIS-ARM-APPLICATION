@@ -24,6 +24,4 @@ C_DEPS :=
 SUBDIRS := \
 Src \
 Startup \
-chip_headers/Drivers/STM32F4xx_HAL_Driver/Src/Legacy \
-chip_headers/Drivers/STM32F4xx_HAL_Driver/Src \
 

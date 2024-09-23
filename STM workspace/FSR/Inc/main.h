@@ -14,8 +14,7 @@
 #include <stm32f4xx.h> // Library for STM32f407
 #include <arm_math.h>  // Library for math functions
 #include "adc.h"
-#include <stm32f4xx_hal.h>
-
+#include "clock.h"
 
 
 

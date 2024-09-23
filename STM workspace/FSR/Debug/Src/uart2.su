@@ -1,0 +1,3 @@
+../Src/uart2.c:14:6:uart2_init	4	static
+../Src/uart2.c:54:6:uart2_single_write	16	static
+../Src/uart2.c:63:6:uart2_string_write	16	static
