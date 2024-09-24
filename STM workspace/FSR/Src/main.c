@@ -19,10 +19,8 @@
 #include <main.h>
 
 extern volatile uint16_t dma2_status;
-extern volatile uint32_t adc_data;
-extern uint16_t adc1_data;  // Extract ADC1 data
-extern uint16_t adc2_data;
-extern uint16_t adc3_data;
+extern volatile uint32_t adc_data[3];
+
 
 int main(void){
 
@@ -31,17 +29,15 @@ int main(void){
 	adc_start();
 
 	while(1){
-
 		if(dma2_status) {
 		// Reset flag
 		dma2_status = 0;
-
 		}
+
 
 
 	}
 }
 
-void DMA2_Stream0_IRQHandler(void);
 
 
