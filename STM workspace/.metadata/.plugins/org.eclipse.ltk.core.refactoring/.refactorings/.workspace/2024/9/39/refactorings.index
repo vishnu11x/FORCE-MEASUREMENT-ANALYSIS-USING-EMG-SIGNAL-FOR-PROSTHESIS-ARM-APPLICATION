@@ -3,3 +3,5 @@
 1727020211981	Delete resource 'FSR/Inc/stm32f4xx_hal_conf.h'
 1727020450781	Delete resource 'FSR/chip_headers/Drivers/STM32F4xx_HAL_Driver'
 1727075836829	Delete resource 'test'
+1727537189606	Delete resource 'FSR/Src/uart2.c'
+1727546418079	Delete resource 'FSR/Inc/uart2.h'

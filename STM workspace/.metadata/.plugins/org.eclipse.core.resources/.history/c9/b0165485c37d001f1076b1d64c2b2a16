@@ -1,0 +1,18 @@
+/*
+ * uart2.h
+ *
+ *  Created on: Feb 28, 2024
+ *      Author: vishnu
+ */
+
+#ifndef UART2_H_
+#define UART2_H_
+
+#include <stdio.h>
+#include <arm_math.h>
+#include <string.h>
+#include <stm32f4xx.h>
+
+
+
+#endif /* UART2_H_ */

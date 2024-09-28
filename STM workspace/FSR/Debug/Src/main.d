@@ -37,7 +37,8 @@ Src/main.o: ../Src/main.c ../Inc/main.h \
  D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/DSP/Include/dsp/filtering_functions.h \
  D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/DSP/Include/dsp/support_functions.h \
  D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/DSP/Include/dsp/quaternion_math_functions.h \
- ../Inc/adc.h ../Inc/clock.h
+ ../Inc/adc.h ../Inc/clock.h ../Inc/uart.h \
+ D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
 ../Inc/main.h:
 D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:
 D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h:
@@ -79,3 +80,5 @@ D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/
 D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/DSP/Include/dsp/quaternion_math_functions.h:
 ../Inc/adc.h:
 ../Inc/clock.h:
+../Inc/uart.h:
+D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h:

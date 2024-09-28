@@ -1,0 +1,27 @@
+/*
+ * adc.h
+ *
+ *  Created on: Sep 21, 2024
+ *      Author: Vishnu
+ */
+
+#ifndef ADC_H_
+#define ADC_H_
+
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stm32f4xx.h>  // Library for STM32f407
+
+#define NUM_SAMPLE 30
+
+extern volatile uint16_t dma2_status;
+extern volatile uint32_t adc_data[NUM_SAMPLE];
+extern float_t adc_vdata[NUM_SAMPLE];
+
+
+
+void adc_init(void);
+void adc_start(void);
+
+#endif /* ADC_H_ */

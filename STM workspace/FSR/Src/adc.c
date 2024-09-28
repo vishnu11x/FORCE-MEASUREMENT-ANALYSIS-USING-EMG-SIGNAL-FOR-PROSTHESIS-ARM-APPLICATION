@@ -7,8 +7,10 @@
 
 #include <adc.h>
 
-volatile uint32_t adc_data[3];
+volatile uint32_t adc_data[NUM_SAMPLE];
 volatile uint16_t dma2_status;
+float_t adc_vdata[NUM_SAMPLE];
+
 
 
 void adc_init(void){
@@ -62,7 +64,7 @@ void adc_init(void){
 	DMA2_Stream0 -> CR |= (DMA_SxCR_MINC);  //Enable Memory Inc
 	DMA2_Stream0 -> CR |= (DMA_SxCR_CIRC);  //Enable circular mode
 	DMA2_Stream0 -> CR &= ~( (DMA_SxCR_DIR_0) | (DMA_SxCR_DIR_1));  //Set transfer direction
-	DMA2_Stream0 -> NDTR = 3;  //Set no.of data register
+	DMA2_Stream0 -> NDTR = NUM_SAMPLE;  //Set no.of data register
 	DMA2_Stream0 -> PAR = (uint32_t) (&(ADC -> CDR));  //Set Peri Address
 	DMA2_Stream0 -> M0AR = (uint32_t) (&adc_data);  //Set Mem Address
 
@@ -74,7 +76,7 @@ void adc_init(void){
 	/* CONFIG TIMER FOR TRIGGER */
 
 	TIM2 -> PSC = (8400 - 1);  // Set prescaler for 10000Hz timer frequency
-	TIM2 -> ARR = (100-1);  // Set auto reload value
+	TIM2 -> ARR = (1000-1);  // Set auto reload value
 
 	TIM2 -> CR2 &= ~((TIM_CR2_MMS_0) | (TIM_CR2_MMS_2));  // Select update event for TRGO
 	TIM2 -> CR2 |= (TIM_CR2_MMS_1);
@@ -95,14 +97,23 @@ void adc_start(void){
 
 }
 
+void adc_convert(void){
+	for(int i=0; i<NUM_SAMPLE; i++){
+		adc_vdata[i] = (( adc_data[i] * ADC_VREF) / ADC_RES);
+	}
+}
+
+
 // Interrupt Service Routine for DMA2 Stream 0
 void DMA2_Stream0_IRQHandler(void) {
     // Check for DMA transfer complete interrupt flag
     if(DMA2->LISR & DMA_LISR_TCIF0) {
-        // Clear the interrupt flag
-        DMA2->LIFCR |= DMA_LIFCR_CTCIF0;
 
         dma2_status = 1;
+        // Clear the interrupt flag
+        DMA2->LIFCR |= DMA_LIFCR_CTCIF0;
+		adc_convert();
+
 
 
     }
