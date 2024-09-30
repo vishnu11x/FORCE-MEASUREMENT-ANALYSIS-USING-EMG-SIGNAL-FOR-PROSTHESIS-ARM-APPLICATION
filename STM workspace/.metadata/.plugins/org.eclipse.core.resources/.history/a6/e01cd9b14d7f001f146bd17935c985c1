@@ -1,0 +1,15 @@
+/*
+ * uart.c
+ *
+ *  Created on: Sep 30, 2024
+ *      Author: Vishnu
+ */
+
+#include <uart.h>
+
+void uart_init(void){
+
+	/* Enable Clock */
+	RCC ->
+}
+

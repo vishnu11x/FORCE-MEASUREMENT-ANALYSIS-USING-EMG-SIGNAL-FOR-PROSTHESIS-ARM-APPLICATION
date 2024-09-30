@@ -6,10 +6,12 @@
  */
 
 #include <adc.h>
+#include "uart.h"
 
 volatile uint32_t adc_data[NUM_SAMPLE];
 volatile uint16_t dma2_status;
 float_t adc_vdata[NUM_SAMPLE];
+char msg[50] = {'\0'};
 
 
 
@@ -76,7 +78,7 @@ void adc_init(void){
 	/* CONFIG TIMER FOR TRIGGER */
 
 	TIM2 -> PSC = (8400 - 1);  // Set prescaler for 10000Hz timer frequency
-	TIM2 -> ARR = (1000-1);  // Set auto reload value
+	TIM2 -> ARR = (40-1);  // Set auto reload value
 
 	TIM2 -> CR2 &= ~((TIM_CR2_MMS_0) | (TIM_CR2_MMS_2));  // Select update event for TRGO
 	TIM2 -> CR2 |= (TIM_CR2_MMS_1);
@@ -112,9 +114,8 @@ void DMA2_Stream0_IRQHandler(void) {
         dma2_status = 1;
         // Clear the interrupt flag
         DMA2->LIFCR |= DMA_LIFCR_CTCIF0;
-		adc_convert();
-
-
+		sprintf(msg, "%lu, %lu, %lu\n\r", adc_data[0], adc_data[1], adc_data[2]);
+		uart_string_write(msg);
 
     }
 }

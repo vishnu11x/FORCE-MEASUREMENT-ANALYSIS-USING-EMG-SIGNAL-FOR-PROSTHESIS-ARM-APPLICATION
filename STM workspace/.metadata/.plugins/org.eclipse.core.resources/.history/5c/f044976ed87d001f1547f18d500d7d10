@@ -1,0 +1,28 @@
+/*
+ * uart.c
+ *
+ *  Created on: Sep 28, 2024
+ *      Author: Vishnu
+ */
+
+#include <uart.h>
+
+void uart_init(void){
+
+	//Enable Clock
+	RCC -> AHB1ENR |= RCC_AHB1ENR_GPIOAEN; //Clock for GPIOA
+	RCC -> APB2ENR |= RCC_APB2ENR_USART1EN;  //Clock fr UART1
+
+	//Configure GPIO
+	GPIOA -> MODER &= GPIO_MODER_MODE9_0;  //PA9 set to alternate function mode
+	GPIOA -> MODER |= GPIO_MODER_MODE9_1;
+
+	GPIOA -> AFR[1] &= GPIO_AFRH_AFRH1_3;  //Set AF7
+	GPIOA -> AFR[1] |= (GPIO_AFRH_AFRH1_0 | GPIO_AFRH_AFRH1_1 | GPIO_AFRH_AFRH1_2);
+
+	//Configuer UART1
+	USART1 -> BRR = 0x02D9;
+	//USART1->BRR = 0x02D9;  // Set baud rate to 115200
+
+
+}

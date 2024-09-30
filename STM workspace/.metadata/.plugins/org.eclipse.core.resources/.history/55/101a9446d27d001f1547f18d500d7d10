@@ -1,0 +1,9 @@
+/*
+ * uart.c
+ *
+ *  Created on: Sep 28, 2024
+ *      Author: Vishnu
+ */
+
+#include <uart.h>
+

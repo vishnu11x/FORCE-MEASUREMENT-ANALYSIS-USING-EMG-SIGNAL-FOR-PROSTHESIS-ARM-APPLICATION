@@ -1,0 +1,53 @@
+/*
+ * uart.c
+ *
+ *  Created on: Sep 28, 2024
+ *      Author: Vishnu
+ */
+
+#include <uart.h>
+
+extern float_t adc_vdata[NUM_SAMPLE];
+
+void uart_dma_init(void){
+
+	/* Enable Clock */
+	RCC -> AHB1ENR |= RCC_AHB1ENR_GPIOAEN; //Clock for GPIOA
+	RCC -> APB2ENR |= RCC_APB2ENR_USART1EN;  //Clock for UART1
+	RCC -> AHB1ENR |= RCC_AHB1ENR_DMA2EN;  //Clock for DMA2
+
+	/* Configure GPIO */
+	GPIOA -> MODER &= ~(GPIO_MODER_MODE9_0);  //PA9 set to alternate function mode
+	GPIOA -> MODER |= GPIO_MODER_MODE9_1;
+
+	GPIOA -> AFR[1] &= ~(GPIO_AFRH_AFRH2_3);  //Set AF7
+	GPIOA -> AFR[1] |= (GPIO_AFRH_AFRH2_0 | GPIO_AFRH_AFRH2_1 | GPIO_AFRH_AFRH2_2);
+
+	/* Configure UART1 */
+	// (peri_clk +(baud rate/2))/baud rate
+	USART1 -> BRR = 0x02D9;  //Set baud rate to 115200
+	USART1 -> CR1 |= USART_CR1_TE;  //Enable transmitter
+	USART1 -> CR1 |= USART_CR1_UE;  //Enable UART
+
+}
+
+/* Write a character to UART2 */
+void uart_single_write (char ch)
+{
+    /* wait until Tx buffer empty */
+    while (!(USART1->SR & (1U << 7))) {}
+    USART1->DR = ch;
+}
+
+/* Write a string to UART2 */
+void uart_string_write(char *str)
+{
+ while (*str)
+   {
+       // Wait until transmit data register (TDR) is empty
+       while (!(USART1->SR & (1U << 7)));
+
+       // Transmit string
+       USART1->DR = *str++;
+   }
+}

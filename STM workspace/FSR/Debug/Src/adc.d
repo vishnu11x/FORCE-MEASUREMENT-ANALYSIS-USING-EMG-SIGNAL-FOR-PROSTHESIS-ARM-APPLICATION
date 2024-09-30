@@ -36,7 +36,8 @@ Src/adc.o: ../Src/adc.c ../Inc/adc.h \
  D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Include/cmsis_version.h \
  D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Include/cmsis_compiler.h \
  D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Include/mpu_armv7.h \
- D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
+ D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \
+ ../Inc/uart.h
 ../Inc/adc.h:
 D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/DSP/Include/arm_math.h:
 D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/DSP/Include/arm_math_types.h:
@@ -76,3 +77,4 @@ D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/
 D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Include/cmsis_compiler.h:
 D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Include/mpu_armv7.h:
 D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/STM\ workspace/FSR/chip_headers/Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h:
+../Inc/uart.h:

@@ -27,18 +27,20 @@ int main(void){
 	clock_max_config();
 	adc_init();
 	adc_start();
+	uart_init();
 
 	while(1){
-		if(dma2_status) {
-		// Reset flag
-		dma2_status = 0;
+
+		if(dma2_status){
+
+			//clear dma flag
+			dma2_status = 0;
 
 		}
 
-
-
 	}
 }
+
 
 
 
