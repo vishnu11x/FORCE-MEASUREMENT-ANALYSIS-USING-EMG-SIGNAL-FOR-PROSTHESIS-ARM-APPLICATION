@@ -2,6 +2,7 @@
 "./Src/clock.o"
 "./Src/delayms.o"
 "./Src/main.o"
+"./Src/switch.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"
 "./Src/uart.o"

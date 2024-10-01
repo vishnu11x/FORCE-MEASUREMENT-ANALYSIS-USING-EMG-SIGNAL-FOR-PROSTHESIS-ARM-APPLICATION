@@ -16,7 +16,7 @@
 #include <adc.h>
 #include <uart.h>
 #include <clock.h>
-
+#include <switch.h>
 
 
 #endif /* MAIN_H_ */

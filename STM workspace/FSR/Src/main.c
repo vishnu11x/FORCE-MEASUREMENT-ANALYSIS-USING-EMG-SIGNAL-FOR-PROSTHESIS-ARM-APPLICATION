@@ -25,9 +25,12 @@ extern float_t adc_vdata[NUM_SAMPLE];
 int main(void){
 
 	clock_max_config();
+	switch_init();
 	adc_init();
-	adc_start();
 	uart_init();
+	while(!(GPIOA -> IDR & GPIO_IDR_IDR_5)){}
+	adc_start();
+
 
 	while(1){
 

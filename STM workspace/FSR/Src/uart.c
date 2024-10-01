@@ -10,7 +10,7 @@
 void uart_init(void){
 
 	/* Enable Clock */
-	RCC -> AHB1ENR |= RCC_AHB1ENR_GPIOCEN;  //Clock for GPIOb
+	RCC -> AHB1ENR |= RCC_AHB1ENR_GPIOCEN;  //Clock for GPIO C
 	RCC -> APB1ENR |= RCC_APB1ENR_UART4EN;  //Clock for UART4
 
 	/*Configure PC10*/

@@ -9,6 +9,7 @@ C_SRCS += \
 ../Src/clock.c \
 ../Src/delayms.c \
 ../Src/main.c \
+../Src/switch.c \
 ../Src/syscalls.c \
 ../Src/sysmem.c \
 ../Src/uart.c 
@@ -18,6 +19,7 @@ OBJS += \
 ./Src/clock.o \
 ./Src/delayms.o \
 ./Src/main.o \
+./Src/switch.o \
 ./Src/syscalls.o \
 ./Src/sysmem.o \
 ./Src/uart.o 
@@ -27,6 +29,7 @@ C_DEPS += \
 ./Src/clock.d \
 ./Src/delayms.d \
 ./Src/main.d \
+./Src/switch.d \
 ./Src/syscalls.d \
 ./Src/sysmem.d \
 ./Src/uart.d 
@@ -39,7 +42,7 @@ Src/%.o Src/%.su Src/%.cyclo: ../Src/%.c Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/adc.cyclo ./Src/adc.d ./Src/adc.o ./Src/adc.su ./Src/clock.cyclo ./Src/clock.d ./Src/clock.o ./Src/clock.su ./Src/delayms.cyclo ./Src/delayms.d ./Src/delayms.o ./Src/delayms.su ./Src/main.cyclo ./Src/main.d ./Src/main.o ./Src/main.su ./Src/syscalls.cyclo ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.cyclo ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su ./Src/uart.cyclo ./Src/uart.d ./Src/uart.o ./Src/uart.su
+	-$(RM) ./Src/adc.cyclo ./Src/adc.d ./Src/adc.o ./Src/adc.su ./Src/clock.cyclo ./Src/clock.d ./Src/clock.o ./Src/clock.su ./Src/delayms.cyclo ./Src/delayms.d ./Src/delayms.o ./Src/delayms.su ./Src/main.cyclo ./Src/main.d ./Src/main.o ./Src/main.su ./Src/switch.cyclo ./Src/switch.d ./Src/switch.o ./Src/switch.su ./Src/syscalls.cyclo ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.cyclo ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su ./Src/uart.cyclo ./Src/uart.d ./Src/uart.o ./Src/uart.su
 
 .PHONY: clean-Src
 

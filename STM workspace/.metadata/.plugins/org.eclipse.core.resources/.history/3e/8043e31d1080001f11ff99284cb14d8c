@@ -1,0 +1,13 @@
+/*
+ * switch.c
+ *
+ *  Created on: Oct 1, 2024
+ *      Author: Vishnu
+ */
+
+#include <switch.h>
+
+void switch_init(void){
+
+	RCC-> a
+}
