@@ -1,4 +1,11 @@
-21:28:53 **** Incremental Build of configuration Debug for project FSR ****
+14:25:48 **** Incremental Build of configuration Debug for project FSR ****
+make -j12 all 
+arm-none-eabi-size  FSR.elf 
+   text	   data	    bss	    dec	    hex	filename
+  24332	    456	   1968	  26756	   6884	FSR.elf
+Finished building: default.size.stdout
+ 
+14:25:53 **** Incremental Build of configuration Debug for project FSR ****
 make -j12 all 
 arm-none-eabi-size  FSR.elf 
    text	   data	    bss	    dec	    hex	filename

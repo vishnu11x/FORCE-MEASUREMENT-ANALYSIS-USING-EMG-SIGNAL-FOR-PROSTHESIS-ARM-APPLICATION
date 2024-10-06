@@ -1331,9 +1331,9 @@ void adc_init(void){
  8000ec2:	f04f 4380 	mov.w	r3, #1073741824	@ 0x40000000
  8000ec6:	f242 02cf 	movw	r2, #8399	@ 0x20cf
  8000eca:	629a      	str	r2, [r3, #40]	@ 0x28
-	TIM2 -> ARR = (10-1);  // Set auto reload value
+	TIM2 -> ARR = (20-1);  // Set auto reload value
  8000ecc:	f04f 4380 	mov.w	r3, #1073741824	@ 0x40000000
- 8000ed0:	2209      	movs	r2, #9
+ 8000ed0:	2213      	movs	r2, #19
  8000ed2:	62da      	str	r2, [r3, #44]	@ 0x2c
 
 	TIM2 -> CR2 &= ~((TIM_CR2_MMS_0) | (TIM_CR2_MMS_2));  // Select update event for TRGO

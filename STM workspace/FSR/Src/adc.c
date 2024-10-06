@@ -78,7 +78,7 @@ void adc_init(void){
 	/* CONFIG TIMER FOR TRIGGER */
 
 	TIM2 -> PSC = (8400 - 1);  // Set prescaler for 10000Hz timer frequency
-	TIM2 -> ARR = (10-1);  // Set auto reload value
+	TIM2 -> ARR = (20-1);  // Set auto reload value
 
 	TIM2 -> CR2 &= ~((TIM_CR2_MMS_0) | (TIM_CR2_MMS_2));  // Select update event for TRGO
 	TIM2 -> CR2 |= (TIM_CR2_MMS_1);
