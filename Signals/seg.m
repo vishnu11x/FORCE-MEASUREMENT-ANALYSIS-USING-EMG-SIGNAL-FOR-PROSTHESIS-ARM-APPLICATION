@@ -471,6 +471,7 @@ for i =1:length(fileList_hW)
 
 end
 
+
 %% Load Force data
 % Specify the folder where the files are stored
 folderPath_nWF = uigetdir();
