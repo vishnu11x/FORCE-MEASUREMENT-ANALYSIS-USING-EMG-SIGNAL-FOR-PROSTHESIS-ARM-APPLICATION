@@ -20,13 +20,13 @@ fileList_mW = dir(fullfile(folderPath_mW, '*.mat'));
 fileList_hW = dir(fullfile(folderPath_hW, '*.mat'));
 
 % Initialize a cell array to hold the loaded EMG data
-FCR_nW = cell(length(fileList_nW), 1);
-FCR_mW = cell(length(fileList_mW), 1);
-FCR_hW = cell(length(fileList_hW), 1);
+fFCR_nW = cell(length(fileList_nW), 1);
+fFCR_mW = cell(length(fileList_mW), 1);
+fFCR_hW = cell(length(fileList_hW), 1);
 
-FDS_nW = cell(length(fileList_nW), 1);
-FDS_mW = cell(length(fileList_mW), 1);
-FDS_hW = cell(length(fileList_hW), 1);
+fFDS_nW = cell(length(fileList_nW), 1);
+fFDS_mW = cell(length(fileList_mW), 1);
+fFDS_hW = cell(length(fileList_hW), 1);
 
 % Initialize a cell array to hold the time vector
 ts_nW = cell(length(fileList_nW), 1);
@@ -47,8 +47,8 @@ for i = 1:length(fileList_nW)
     % Load the data from the file
     buffer = load(filePath);
 
-    FCR_nW{i} = buffer.data(buffer.datastart(1,1):buffer.dataend(1,1));
-    FDS_nW{i} = buffer.data(buffer.datastart(2,1):buffer.dataend(2,1));
+    fFCR_nW{i} = buffer.data(buffer.datastart(1,1):buffer.dataend(1,1));
+    fFDS_nW{i} = buffer.data(buffer.datastart(2,1):buffer.dataend(2,1));
     
     % Display the name of the loaded file
     disp(['Loaded file: ' fileList_nW(i).name]);
@@ -64,8 +64,8 @@ for i = 1:length(fileList_mW)
     % Load the data from the file
     buffer = load(filePath);
 
-    FCR_mW{i} = buffer.data(buffer.datastart(1,1):buffer.dataend(1,1));
-    FDS_mW{i} = buffer.data(buffer.datastart(2,1):buffer.dataend(2,1));
+    fFCR_mW{i} = buffer.data(buffer.datastart(1,1):buffer.dataend(1,1));
+    fFDS_mW{i} = buffer.data(buffer.datastart(2,1):buffer.dataend(2,1));
     
     % Display the name of the loaded file
     disp(['Loaded file: ' fileList_mW(i).name]);
@@ -80,8 +80,8 @@ for i = 1:length(fileList_hW)
     % Load the data from the file
     buffer = load(filePath);
 
-    FCR_hW{i} = buffer.data(buffer.datastart(1,1):buffer.dataend(1,1));
-    FDS_hW{i} = buffer.data(buffer.datastart(2,1):buffer.dataend(2,1));
+    fFCR_hW{i} = buffer.data(buffer.datastart(1,1):buffer.dataend(1,1));
+    fFDS_hW{i} = buffer.data(buffer.datastart(2,1):buffer.dataend(2,1));
     
     % Display the name of the loaded file
     disp(['Loaded file: ' fileList_hW(i).name]);
@@ -91,24 +91,50 @@ end
 
 % time vector and task lables for signals
 for i = 1:length(fileList_nW)
-    len = length(FCR_nW{i});
+    len = length(fFCR_nW{i});
     ts_nW{i} = 0:TS:(len-1)/FS;
     tasklable_nW{i} = generate_tasklables(len,task_len_smp);
     len = 0;
 end
 
 for i = 1:length(fileList_mW)
-    len = length(FCR_mW{i});
+    len = length(fFCR_mW{i});
     ts_mW{i} = 0:TS:(len-1)/FS;
     tasklable_mW{i} = generate_tasklables(len,task_len_smp);
     len = 0;
 end
 
 for i = 1:length(fileList_hW)
-    len = length(FCR_hW{i});
+    len = length(fFCR_hW{i});
     ts_hW{i} = 0:TS:(len-1)/FS;
     tasklable_hW{i} = generate_tasklables(len,task_len_smp);
     len = 0;
+end
+
+%% Extract 72 sec of signals
+no_samp = 72*1000;
+
+FCR_nW = cell(length(fileList_nW), 1);
+FCR_mW = cell(length(fileList_mW), 1);
+FCR_hW = cell(length(fileList_hW), 1);
+
+FDS_nW = cell(length(fileList_nW), 1);
+FDS_mW = cell(length(fileList_mW), 1);
+FDS_hW = cell(length(fileList_hW), 1);
+
+for i=1:length(fileList_nW)
+        FCR_nW{i} = fFCR_nW{i}(1:no_samp);
+        FDS_nW{i} = fFDS_nW{i}(1:no_samp);
+end
+
+for i=1:length(fileList_mW)
+        FCR_mW{i} = fFCR_mW{i}(1:no_samp);
+        FDS_mW{i} = fFDS_mW{i}(1:no_samp);
+end
+
+for i=1:length(fileList_hW)
+        FCR_hW{i} = fFCR_hW{i}(1:no_samp);
+        FDS_hW{i} = fFDS_hW{i}(1:no_samp);
 end
 
 %% Butterworth filter
@@ -308,8 +334,8 @@ for i =1:length(fileList_nW)
         data0 = seg_rct_FCRnW{i}{1,j};
         data1 = seg_rct_FDSnW{i}{1,j};
         
-        rms_seg_FCRnW{i}{1,j} = sqrt(mean(data0.^2));
-        rms_seg_FDSnW{i}{1,j} = sqrt(mean(data1.^2));
+        rms_seg_FCRnW{i}{j,1} = sqrt(mean(data0.^2));
+        rms_seg_FDSnW{i}{j,1} = sqrt(mean(data1.^2));
         
         data0 = 0;
         data1 = 0;
@@ -324,8 +350,8 @@ for i =1:length(fileList_mW)
         data0 = seg_rct_FCRmW{i}{1,j};
         data1 = seg_rct_FDSmW{i}{1,j};
         
-        rms_seg_FCRmW{i}{1,j} = sqrt(mean(data0.^2));
-        rms_seg_FDSmW{i}{1,j} = sqrt(mean(data1.^2));
+        rms_seg_FCRmW{i}{j,1} = sqrt(mean(data0.^2));
+        rms_seg_FDSmW{i}{j,1} = sqrt(mean(data1.^2));
         
         data0 = 0;
         data1 = 0;
@@ -340,8 +366,8 @@ for i = 1:length(fileList_hW)
         data0 = seg_rct_FCRhW{i}{1,j};
         data1 = seg_rct_FDShW{i}{1,j};
         
-        rms_seg_FCRhW{i}{1,j} = sqrt(mean(data0.^2));
-        rms_seg_FDShW{i}{1,j} = sqrt(mean(data1.^2));
+        rms_seg_FCRhW{i}{j,1} = sqrt(mean(data0.^2));
+        rms_seg_FDShW{i}{j,1} = sqrt(mean(data1.^2));
         
         data0 = 0;
         data1 = 0;
@@ -368,8 +394,8 @@ for i =1:length(fileList_nW)
         data0 = seg_rct_FCRnW{i}{1,j};
         data1 = seg_rct_FDSnW{i}{1,j};
         
-        mav_seg_FCRnW{i}{1,j} = mean(abs(data0));
-        mav_seg_FDSnW{i}{1,j} = mean(abs(data1));
+        mav_seg_FCRnW{i}{j,1} = mean(abs(data0));
+        mav_seg_FDSnW{i}{j,1} = mean(abs(data1));
         
         data0 = 0;
         data1 = 0;
@@ -384,8 +410,8 @@ for i =1:length(fileList_mW)
         data0 = seg_rct_FCRmW{i}{1,j};
         data1 = seg_rct_FDSmW{i}{1,j};
         
-        mav_seg_FCRmW{i}{1,j} = mean(abs(data0));
-        mav_seg_FDSmW{i}{1,j} = mean(abs(data1));
+        mav_seg_FCRmW{i}{j,1} = mean(abs(data0));
+        mav_seg_FDSmW{i}{j,1} = mean(abs(data1));
         
         data0 = 0;
         data1 = 0;
@@ -400,8 +426,8 @@ for i =1:length(fileList_hW)
         data0 = seg_rct_FCRhW{i}{1,j};
         data1 = seg_rct_FDShW{i}{1,j};
         
-        mav_seg_FCRhW{i}{1,j} = mean(abs(data0));
-        mav_seg_FDShW{i}{1,j} = mean(abs(data1));
+        mav_seg_FCRhW{i}{j,1} = mean(abs(data0));
+        mav_seg_FDShW{i}{j,1} = mean(abs(data1));
         
         data0 = 0;
         data1 = 0;
@@ -429,8 +455,8 @@ for i =1:length(fileList_nW)
         data0 = seg_FCRnW{i}{1,j};
         data1 = seg_FDSnW{i}{1,j};
         
-        zc_seg_FCRnW{i}{1,j} = zerocrossrate(data0);
-        zc_seg_FDSnW{i}{1,j} = zerocrossrate(data1);
+        zc_seg_FCRnW{i}{j,1} = zerocrossrate(data0);
+        zc_seg_FDSnW{i}{j,1} = zerocrossrate(data1);
         
         data0 = 0;
         data1 = 0;
@@ -445,8 +471,8 @@ for i =1:length(fileList_mW)
         data0 = seg_FCRmW{i}{1,j};
         data1 = seg_FDSmW{i}{1,j};
         
-        zc_seg_FCRmW{i}{1,j} = zerocrossrate(data0);
-        zc_seg_FDSmW{i}{1,j} = zerocrossrate(data1);
+        zc_seg_FCRmW{i}{j,1} = zerocrossrate(data0);
+        zc_seg_FDSmW{i}{j,1} = zerocrossrate(data1);
         
         data0 = 0;
         data1 = 0;
@@ -461,8 +487,8 @@ for i =1:length(fileList_hW)
         data0 = seg_FCRhW{i}{1,j};
         data1 = seg_FDShW{i}{1,j};
         
-        zc_seg_FCRhW{i}{1,j} = zerocrossrate(data0);
-        zc_seg_FDShW{i}{1,j} = zerocrossrate(data1);
+        zc_seg_FCRhW{i}{j,1} = zerocrossrate(data0);
+        zc_seg_FDShW{i}{j,1} = zerocrossrate(data1);
         
         data0 = 0;
         data1 = 0;
@@ -581,7 +607,7 @@ for i =1:length(fileList_nWF)
 
     for j = 1:length(segF_nW{i})
         data0 = segF_nW{i}{1,j};
-        mav_segF_nW{i}{1,j} = mean(abs(data0));        
+        mav_segF_nW{i}{j,1} = mean(abs(data0));        
         data0 = 0;
     end
 end
@@ -590,7 +616,7 @@ for i =1:length(fileList_mWF)
 
     for j = 1:length(segF_mW{i})
         data0 = segF_mW{i}{1,j};
-        mav_segF_mW{i}{1,j} = mean(abs(data0));        
+        mav_segF_mW{i}{j,1} = mean(abs(data0));        
         data0 = 0;
     end
 end
@@ -599,12 +625,84 @@ for i =1:length(fileList_hWF)
 
     for j = 1:length(segF_hW{i})
         data0 = segF_hW{i}{1,j};
-        mav_segF_hW{i}{1,j} = mean(abs(data0));        
+        mav_segF_hW{i}{j,1} = mean(abs(data0));        
         data0 = 0;
     end
 end
 
-%% save into csv file
+%% export mat file
+in = input('Save into .mat file (y/n)', 's');
+
+if (in == 'Y' | 'y')
+    RMS_1 = [];
+    MAV_1 = [];
+    ZC_1 = [];
+
+    RMS_2 = [];
+    MAV_2 = [];
+    ZC_2 = [];
+
+    Label = [];
+    Force = [];
+    Weight = [];
+    filename = "features.mat";
+
+    % Channel_1
+    for i = 1:length(fileList_nW)
+        RMS_1 = [RMS_1; rms_seg_FCRnW{i}(:)];
+        MAV_1 = [MAV_1; mav_seg_FCRnW{i}(:)];
+        ZC_1 = [ZC_1; zc_seg_FCRnW{i}(:)];
+        Label = [Label;seglabel_nW{i}(:)];
+        Force = [Force;segF_nW{i}(:)];
+    end
+    
+    for i = 1:length(fileList_mW)
+        RMS_1 = [RMS_1; rms_seg_FCRmW{i}(:)];
+        MAV_1 = [MAV_1; mav_seg_FCRmW{i}(:)];
+        ZC_1 = [ZC_1; zc_seg_FCRmW{i}(:)];
+        Label = [Label;seglabel_mW{i}(:)];
+        Force = [Force;segF_mW{i}(:)];
+    end
+    
+    for i = 1:length(fileList_hW)
+        RMS_1 = [RMS_1; rms_seg_FCRhW{i}(:)];
+        MAV_1 = [MAV_1; mav_seg_FCRhW{i}(:)];
+        ZC_1 = [ZC_1; zc_seg_FCRhW{i}(:)];
+        Label = [Label;seglabel_hW{i}(:)];
+        Force = [Force;segF_hW{i}(:)];
+    end
+    
+    % Channel_2
+    for i = 1:length(fileList_nW)
+        RMS_2 = [RMS_2; rms_seg_FDSnW{i}(:)];
+        MAV_2 = [MAV_2; mav_seg_FDSnW{i}(:)];
+        ZC_2 = [ZC_2; zc_seg_FDSnW{i}(:)];
+    end
+    
+    for i = 1:length(fileList_mW)
+        RMS_2 = [RMS_2; rms_seg_FDSmW{i}(:)];
+        MAV_2 = [MAV_2; mav_seg_FDSmW{i}(:)];
+        ZC_2 = [ZC_2; zc_seg_FDSmW{i}(:)];
+    end
+    
+    for i = 1:length(fileList_hW)
+        RMS_2 = [RMS_2; rms_seg_FDShW{i}(:)];
+        MAV_2 = [MAV_2; mav_seg_FDShW{i}(:)];
+        ZC_2 = [ZC_2; zc_seg_FDShW{i}(:)];
+    end
+    RMS_1 = cell2table(RMS_1);
+    MAV_1 = cell2table(MAV_1);
+    ZC_1 = cell2table(ZC_1);
+
+    RMS_2 = cell2table(RMS_2);
+    MAV_2 = cell2table(MAV_2);
+    ZC_2 = cell2table(ZC_2);
+
+    Force = cell2table(Force);
+    Label = array2table(Label);
+    save(filename,"RMS_1","MAV_1","ZC_1","RMS_2","MAV_2","ZC_2","Label","Force",'-mat');
+end
+
 
 %% FUNCTIONS
 
