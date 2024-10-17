@@ -653,7 +653,7 @@ if (in == 'Y' | 'y')
         MAV_1 = [MAV_1; mav_seg_FCRnW{i}(:)];
         ZC_1 = [ZC_1; zc_seg_FCRnW{i}(:)];
         Label = [Label;seglabel_nW{i}(:)];
-        Force = [Force;segF_nW{i}(:)];
+        Force = [Force;mav_segF_nW{i}(:)];
     end
     
     for i = 1:length(fileList_mW)
@@ -661,7 +661,7 @@ if (in == 'Y' | 'y')
         MAV_1 = [MAV_1; mav_seg_FCRmW{i}(:)];
         ZC_1 = [ZC_1; zc_seg_FCRmW{i}(:)];
         Label = [Label;seglabel_mW{i}(:)];
-        Force = [Force;segF_mW{i}(:)];
+        Force = [Force;mav_segF_mW{i}(:)];
     end
     
     for i = 1:length(fileList_hW)
@@ -669,7 +669,7 @@ if (in == 'Y' | 'y')
         MAV_1 = [MAV_1; mav_seg_FCRhW{i}(:)];
         ZC_1 = [ZC_1; zc_seg_FCRhW{i}(:)];
         Label = [Label;seglabel_hW{i}(:)];
-        Force = [Force;segF_hW{i}(:)];
+        Force = [Force;mav_segF_hW{i}(:)];
     end
     
     % Channel_2

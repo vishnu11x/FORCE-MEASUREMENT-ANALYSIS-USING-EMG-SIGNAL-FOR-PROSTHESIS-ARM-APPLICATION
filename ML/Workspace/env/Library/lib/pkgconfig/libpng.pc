@@ -1,0 +1,12 @@
+prefix=D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/ML/Workspace/env/Library
+exec_prefix=D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/ML/Workspace/env/Library
+libdir=D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/ML/Workspace/env/Library/lib
+includedir=D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/ML/Workspace/env/Library/include/libpng16
+
+Name: libpng
+Description: Loads and saves PNG files
+Version: 1.6.39
+Requires.private: zlib
+Libs: -L${libdir} -lpng16
+Libs.private: -lz
+Cflags: -I${includedir}

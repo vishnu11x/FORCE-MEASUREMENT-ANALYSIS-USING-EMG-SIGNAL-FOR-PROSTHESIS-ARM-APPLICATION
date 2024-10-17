@@ -1,0 +1,13 @@
+prefix=D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/ML/Workspace/env/Library
+exec_prefix=D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/ML/Workspace/env/Library
+libdir=D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/ML/Workspace/env/Library/lib
+sharedlibdir=D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/ML/Workspace/env/Library/lib
+includedir=D:/PROJECTS/Git/HMI_MODEL_PROTHESIS_ARM/ML/Workspace/env/Library/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
