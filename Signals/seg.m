@@ -29,9 +29,9 @@ fFDS_mW = cell(length(fileList_mW), 1);
 fFDS_hW = cell(length(fileList_hW), 1);
 
 % Initialize a cell array to hold the time vector
-ts_nW = cell(length(fileList_nW), 1);
-ts_mW = cell(length(fileList_mW), 1);
-ts_hW = cell(length(fileList_hW), 1);
+fts_nW = cell(length(fileList_nW), 1);
+fts_mW = cell(length(fileList_mW), 1);
+fts_hW = cell(length(fileList_hW), 1);
 
 % Initialize a cell array to hold the lables
 tasklable_nW = cell(length(fileList_nW), 1);
@@ -92,21 +92,21 @@ end
 % time vector and task lables for signals
 for i = 1:length(fileList_nW)
     len = length(fFCR_nW{i});
-    ts_nW{i} = 0:TS:(len-1)/FS;
+    fts_nW{i} = 0:TS:(len-1)/FS;
     tasklable_nW{i} = generate_tasklables(len,task_len_smp);
     len = 0;
 end
 
 for i = 1:length(fileList_mW)
     len = length(fFCR_mW{i});
-    ts_mW{i} = 0:TS:(len-1)/FS;
+    fts_mW{i} = 0:TS:(len-1)/FS;
     tasklable_mW{i} = generate_tasklables(len,task_len_smp);
     len = 0;
 end
 
 for i = 1:length(fileList_hW)
     len = length(fFCR_hW{i});
-    ts_hW{i} = 0:TS:(len-1)/FS;
+    fts_hW{i} = 0:TS:(len-1)/FS;
     tasklable_hW{i} = generate_tasklables(len,task_len_smp);
     len = 0;
 end
@@ -122,19 +122,28 @@ FDS_nW = cell(length(fileList_nW), 1);
 FDS_mW = cell(length(fileList_mW), 1);
 FDS_hW = cell(length(fileList_hW), 1);
 
+ts_nW = cell(length(fileList_nW), 1);
+ts_mW = cell(length(fileList_mW), 1);
+ts_hW = cell(length(fileList_hW), 1);
+
+
 for i=1:length(fileList_nW)
         FCR_nW{i} = fFCR_nW{i}(1:no_samp);
         FDS_nW{i} = fFDS_nW{i}(1:no_samp);
+        ts_nW{i} = fts_nW{i}(1:no_samp);
 end
 
 for i=1:length(fileList_mW)
         FCR_mW{i} = fFCR_mW{i}(1:no_samp);
         FDS_mW{i} = fFDS_mW{i}(1:no_samp);
+        ts_mW{i} = fts_mW{i}(1:no_samp);
+
 end
 
 for i=1:length(fileList_hW)
         FCR_hW{i} = fFCR_hW{i}(1:no_samp);
         FDS_hW{i} = fFDS_hW{i}(1:no_samp);
+        ts_hW{i} = fts_hW{i}(1:no_samp);
 end
 
 %% Butterworth filter
