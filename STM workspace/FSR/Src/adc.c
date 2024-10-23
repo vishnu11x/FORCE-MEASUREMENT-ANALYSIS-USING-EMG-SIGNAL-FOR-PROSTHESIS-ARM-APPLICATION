@@ -86,7 +86,7 @@ void adc_init(void){
 	/* Triple ADC mode */
 	ADC -> CCR |= (ADC_CCR_DDS);  //Set Contin DMA Request
 	ADC -> CCR |= (ADC_CCR_DMA_0);  //Set DMA Mode
-	ADC -> CCR |= (0x0016); // Enable Dual Mode
+	ADC -> CCR |= (0x0016); // Enable Triple Mode
 
 
 }
